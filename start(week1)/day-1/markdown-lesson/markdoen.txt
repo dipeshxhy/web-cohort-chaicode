@@ -1,0 +1,39 @@
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+
+Bold: **bold text** or __bold text__
+Italic: *italic text* or _italic text_
+Bold and Italic: ***bold and italic***
+<del>Strikethrough</del>: ~~strikethrough~~
+
+- Item 1
+- Item 2
+  - Subitem 2.1
+  - Subitem 2.2
+
+
+  1. First item
+2. Second item
+3. Third item
+
+
+```javascript
+// Code block with syntax highlighting
+function hello() {
+  console.log("Hello world!");
+}
+```
+
+> This is a blockquote
+> 
+> > Nested blockquote
+
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+| Cell 3   | Cell 4   |
