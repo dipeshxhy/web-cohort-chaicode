@@ -1,0 +1,41 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Background</title>
+
+    <style>
+      button {
+        padding: 10px 25px;
+        border: none;
+        background-color: rosybrown;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <button class="js-btn">Click to switch background</button>
+    </section>
+
+    <script>
+      function changeTheme(theme) {
+        return theme === "light" ? "#000" : "#fff";
+      }
+      let theme = "light";
+      document.querySelector(".js-btn").addEventListener("click", () => {
+        if (theme === "light") {
+          document.body.style.backgroundColor = changeTheme(theme);
+          theme = "dark";
+        } else {
+          console.log(changeTheme("dark"));
+          document.body.style.backgroundColor = changeTheme("dark");
+          theme = "light";
+        }
+      });
+    </script>
+  </body>
+</html>

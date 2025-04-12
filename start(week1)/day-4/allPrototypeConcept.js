@@ -142,5 +142,5 @@ console.log(hello.directGreet()); // undefined
 
 /**
  * the instance created using new SayHello when we try to access directGreet which is in function objects then it gives undefined because the flows goes like this
- * first it search in
+ * first it search in instance itselg which is hello then if not found then it goes to hello.__proto__ which is SayHello.prototype If not found, look on hello.__proto__.__proto__ (which is Object.prototype) if not found return undefined
  */

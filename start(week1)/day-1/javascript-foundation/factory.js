@@ -15,3 +15,4 @@ function takeUser(user) {
 }
 console.log(takeUser("Dipesh"));
 console.log(takeUser("Hitesh Sir!"));
+
