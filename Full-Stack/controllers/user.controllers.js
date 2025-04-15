@@ -1,6 +1,8 @@
 import User from "../models/User.model.js";
 import crypto from "crypto";
-import sendVerificationEmail from "../utils/mailsender.js";
+import sendVerificationEmail, {
+  sendResetPasswordEmail,
+} from "../utils/mailsender.js";
 import sendErrors from "../utils/error.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -86,7 +88,7 @@ const verifyUser = async (req, res) => {
       });
     }
     user.isVerified = true;
-    user.verificationToken = null;
+    user.verificationToken = undefined;
     await user.save();
     res.status(200).json({
       success: true,
@@ -170,4 +172,150 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, verifyUser, loginUser };
+//getMe
+const getMe = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return sendErrors({
+        res,
+        message: "Not authenticated!",
+        statusCode: 401,
+      });
+    }
+    const profile = await User.findById(user.id);
+    res.status(200).json({
+      profile,
+    });
+  } catch (error) {
+    return sendErrors({
+      res,
+      message: "Error in fetching profile !",
+      statusCode: 401,
+      error,
+    });
+  }
+};
+
+//logout user
+
+const logout = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return sendErrors({
+        res,
+        message: "sorry , Not login!",
+        statusCode: 401,
+      });
+    }
+    res.cookie("secret-token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({
+      success: true,
+      message: "Logout Successful",
+    });
+  } catch (error) {
+    return sendErrors({
+      res,
+      message: "Failed to logout!",
+      error,
+    });
+  }
+};
+
+//forget password
+const forgotPassword = async (req, res) => {
+  try {
+    //email from req.body
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return sendErrors({
+        res,
+        message: "User doesn't exists",
+        statusCode: 404,
+      });
+    }
+    const token = crypto.randomBytes(32).toString("hex");
+    // console.log("token=>", token);
+    user.resetPassword = token;
+
+    user.resetPasswordExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await user.save();
+
+    await sendResetPasswordEmail({
+      to: user.email,
+      token,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Password reset link sent to your email",
+    });
+  } catch (error) {
+    return sendErrors({
+      res,
+      message: "Failed to process password reset request",
+      error,
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+    if (!password || !confirmPassword) {
+      return sendErrors({
+        res,
+        message: "please fill required fields !",
+        statusCode: 400,
+      });
+    }
+    if (password !== confirmPassword) {
+      return sendErrors({
+        res,
+        statusCode: 400,
+        message: " Password do not match !",
+      });
+    }
+    const user = await User.findOne({
+      resetPassword: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return sendErrors({
+        res,
+        statusCode: 400,
+        message: "Invalid or expired reset token",
+      });
+    }
+    user.password = password;
+    user.resetPassword = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    return sendErrors({
+      res,
+      message: "Failed to reset password",
+      error,
+    });
+  }
+};
+export {
+  registerUser,
+  verifyUser,
+  loginUser,
+  logout,
+  getMe,
+  resetPassword,
+  forgotPassword,
+};

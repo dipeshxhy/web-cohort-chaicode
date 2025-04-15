@@ -37,4 +37,31 @@ async function sendVerificationEmail({
     `,
   });
 }
+
+export async function sendResetPasswordEmail({
+  to,
+  token,
+  subject = "Reset Your Password",
+}) {
+  const transporter = createTransporter();
+
+  // This should point to your frontend reset password page, not the API endpoint
+  const link = `${process.env.BASE_URL}/api/v1/users/resetPassword/${token}`;
+
+  return transporter.sendMail({
+    ...baseMailOptions,
+    to,
+    subject,
+    html: `
+      <h2>Password Reset</h2>
+      <p>We received a request to reset your password.</p>
+      <p>Please click on the link below to create a new password:</p>
+      <p><a href="${link}" style="padding: 10px 15px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">Reset Password</a></p>
+      <p>If the button doesn't work, copy and paste this link into your browser:</p>
+      <p>${link}</p>
+      <p>This link will expire in 24 hours.</p>
+      <p>If you didn't request this password reset, please ignore this email.</p>
+    `,
+  });
+}
 export default sendVerificationEmail;
