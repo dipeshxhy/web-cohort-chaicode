@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #9acbd0;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.todo-container {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 100px;
+}
+h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.todo-input {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.todo-button {
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  background-color: #48a6a7;
+  border-radius: 10px;
+  border: none;
+  color: beige;
+  cursor: pointer;
+}
+
+input:focus {
+  border: 2px solid red;
+}
+
+/* todo-lists */
+ul {
+  list-style: none;
+}
+li {
+  margin-block: 10px;
+  font-size: 20px;
+}
+.todo-lists {
+  width: 50%;
+  margin: 0 auto;
+}
+.todo-lists-container {
+  margin-block: 10px;
+  max-height: 40vh;
+  overflow-y: auto;
+  /* background-color: blue; */
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-slider-thumb {
+  background-color: aquamarine;
+  border-radius: 10px;
+}
+.todo-list {
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  color: brown;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #f2efe7;
+}
+.cross {
+  background-color: rgb(236, 90, 90);
+}
+.todo-error {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgb(236, 90, 90);
+}
